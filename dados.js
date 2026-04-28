@@ -20,9 +20,9 @@ const LEGENDA = {
   'G38': { local: 'Ilha ecológica', setor: 'Ilha ecológica' },
   'G15': { local: 'Pátio de sucatas', setor: 'Pátio de sucatas' },
   'G76': { local: 'Galpão 76', setor: 'Expedição vasilhame' },
-  '66AU': { local: 'G9', setor: 'FTP' },
+  '66AU': { local: 'G09', setor: 'FTP' },
   'INT-89': { local: 'Interni', setor: 'Interni' },
-  'FPT/CX': { local: 'G8 FPT', setor: 'Caixaria' },
+  'FPT/CX': { local: 'G08 FPT', setor: 'Caixaria' },
   'RÁDIO': { local: 'Central de Segurança', setor: 'Disponível para demandas' },
   'Pens.': { local: 'Pensilina', setor: 'Pensilina' }
 };
