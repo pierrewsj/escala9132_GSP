@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#111827" />
+  <title>Escala Equipe 9132</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topo">
+    <div>
+      <p class="tag">1º Turno</p>
+      <h1>Escala de Trabalho</h1>
+      <p class="subtitulo">Equipe 9132 • visualização rápida por nome, dia e posto</p>
+    </div>
+    <button id="btnInstalar" class="btn-instalar" hidden>Instalar</button>
+  </header>
+
+  <main class="container">
+    <section class="card hoje-card">
+      <div>
+        <p class="label">Hoje no app</p>
+        <h2 id="tituloHoje">Escala do dia</h2>
+        <p id="infoHoje" class="muted">Use os filtros abaixo para consultar.</p>
+      </div>
+      <button class="btn" onclick="mostrarHoje()">Ver hoje</button>
+    </section>
+
+    <section class="grid-filtros">
+      <div class="card filtro">
+        <label for="selectNome">Buscar por nome</label>
+        <select id="selectNome"></select>
+        <button class="btn principal" onclick="buscarPorNome()">Consultar</button>
+      </div>
+
+      <div class="card filtro">
+        <label for="selectDia">Buscar por dia</label>
+        <select id="selectDia"></select>
+        <button class="btn principal" onclick="buscarPorDia()">Consultar</button>
+      </div>
+
+      <div class="card filtro">
+        <label for="selectPosto">Buscar por posto</label>
+        <select id="selectPosto"></select>
+        <button class="btn principal" onclick="buscarPorPosto()">Consultar</button>
+      </div>
+    </section>
+
+    <section class="card busca-livre">
+      <label for="campoBusca">Busca rápida</label>
+      <input id="campoBusca" type="search" placeholder="Digite nome, posto ou dia... Ex: Pierre, G38, 15" oninput="buscaRapida()" />
+    </section>
+
+    <section class="abas">
+      <button class="aba ativa" onclick="abrirAba('resultado', this)">Resultado</button>
+      <button class="aba" onclick="abrirAba('legenda', this)">Legenda</button>
+      <button class="aba" onclick="abrirAba('admin', this)">Administração</button>
+      <button class="aba" onclick="abrirAba('sobre', this)">Como editar</button>
+    </section>
+
+    <section id="resultado" class="painel ativo">
+      <div id="resultadoConteudo" class="resultado-vazio">
+        Selecione uma consulta acima para visualizar a escala.
+      </div>
+    </section>
+
+    <section id="legenda" class="painel">
+      <div id="legendaConteudo" class="lista-cards"></div>
+    </section>
+
+    <section id="admin" class="painel">
+      <div class="card texto" id="adminLogin">
+        <h2>Administração</h2>
+        <p>Digite a senha para liberar o cadastro de colaboradores, postos, localização e setor.</p>
+        <div class="form-linha">
+          <label for="senhaAdmin">Senha</label>
+          <input id="senhaAdmin" type="password" inputmode="numeric" placeholder="Digite a senha" />
+          <button class="btn principal" onclick="entrarAdmin()">Entrar</button>
+        </div>
+        <p id="msgAdminLogin" class="msg"></p>
+      </div>
+
+      <div id="areaAdmin" class="admin-area" hidden>
+        <div class="card texto admin-header">
+          <div>
+            <h2>Administração liberada</h2>
+            <p class="muted">As alterações ficam salvas no navegador deste aparelho. Use exportar/importar para levar os dados para outro celular ou PC.</p>
+          </div>
+          <button class="btn" onclick="sairAdmin()">Sair</button>
+        </div>
+
+        <div class="grid-admin">
+          <div class="card texto">
+            <h3>Novo colaborador</h3>
+            <label for="novoNome">Nome</label>
+            <input id="novoNome" type="text" placeholder="Ex: JOÃO" />
+            <label for="postoPadrao">Posto padrão</label>
+            <select id="postoPadrao"></select>
+            <button class="btn principal" onclick="salvarColaborador()">Adicionar colaborador</button>
+          </div>
+
+          <div class="card texto">
+            <h3>Novo posto / localização / setor</h3>
+            <label for="novoCodigoPosto">Código do posto</label>
+            <input id="novoCodigoPosto" type="text" placeholder="Ex: 78, G20, CMP" />
+            <label for="novaLocalizacao">Localização</label>
+            <input id="novaLocalizacao" type="text" placeholder="Ex: Pátio central" />
+            <label for="novoSetor">Setor</label>
+            <input id="novoSetor" type="text" placeholder="Ex: Carregamento" />
+            <button class="btn principal" onclick="salvarPosto()">Salvar posto</button>
+          </div>
+
+          <div class="card texto">
+            <h3>Alterar escala</h3>
+            <label for="adminColaborador">Colaborador</label>
+            <select id="adminColaborador"></select>
+            <label for="adminDia">Dia</label>
+            <select id="adminDia"></select>
+            <label for="adminPosto">Posto</label>
+            <select id="adminPosto"></select>
+            <button class="btn principal" onclick="salvarEscalaDia()">Salvar alteração</button>
+          </div>
+
+          <div class="card texto">
+            <h3>Backup dos dados</h3>
+            <button class="btn principal" onclick="exportarDados()">Exportar dados</button>
+            <label class="importar-label" for="arquivoImportacao">Importar backup</label>
+            <input id="arquivoImportacao" type="file" accept="application/json" onchange="importarDados(event)" />
+            <button class="btn perigo" onclick="restaurarPadrao()">Restaurar padrão</button>
+          </div>
+        </div>
+
+        <p id="msgAdmin" class="msg"></p>
+      </div>
+    </section>
+
+    <section id="sobre" class="painel">
+      <div class="card texto">
+        <h2>Como atualizar a escala</h2>
+        <p>Você pode alterar pelo próprio app na aba <strong>Administração</strong>, usando a senha cadastrada.</p>
+        <p>As alterações feitas no app ficam salvas no navegador do aparelho. Para usar em outro celular ou PC, use <strong>Exportar dados</strong> e depois <strong>Importar backup</strong>.</p>
+        <p>Também é possível editar diretamente o arquivo <strong>dados.js</strong> no GitHub e clicar em <strong>Commit changes</strong>.</p>
+        <p>Para não expor dados internos, use nomes abreviados ou códigos se o repositório for público.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Escala Equipe 9132 • App Web</p>
+    <p class="observacao-final"><strong>Observação:</strong> últimas posições da escala cobrem férias e faltas.</p>
+  </footer>
+
+  <script src="dados.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
